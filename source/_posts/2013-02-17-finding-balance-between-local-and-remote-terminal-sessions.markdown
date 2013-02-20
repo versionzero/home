@@ -147,8 +147,7 @@ It also suffers from a far worse problem. This command line will work
 the first time, but will likely fail on subsequent invocations. The
 reason for this should be clear from the error message:
 
-```
-$ ssh localhost -p 2222
+<pre>
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -162,7 +161,7 @@ Add correct host key in /home/user/.ssh/known_hosts to get rid of this message.
 Offending key in /home/user/.ssh/known_hosts:42
 RSA host key for [localhost]:2222 has changed and you have requested strict checking.
 Host key verification failed.
-```
+</pre>
 
 What has happend is that we have moved on to a different host in the
 list of candidate hosts we defined above. So the warning is
