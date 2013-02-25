@@ -28,18 +28,18 @@ the car is not always in the proximity of a wifi access point).
 Raspberry Pi to the rescue.
 
 The [Raspberry Pi](http://www.raspberrypi.org) is a small, inexpensive
-low-power computer machine.  It was originally developed with teaching
-in mind, but sparked an enormous hobby market.  The Raspberry Pi, or
-raspi for short, is available in two models: Model A is $25 the Model
-B is $35. The differences between the models is nominal: the more
-expensive one has more USB ports, more RAM and an Ethernet port.  As a
-developer, the Model B is preferable, since it provides easy extension
-through USB and trivial network access via ethernet, not to mention
-more room to write sloppier prototype code in the roomy 512MB main
-memory.  The Model A would be best suited to production or permanent
-projects, post development.  (Not true in all cases: having network
-access can be critical for some applications-- though a USB wireless
-dongle may mediate this issue.)
+low-power computing machine.  It was originally developed with
+teaching in mind, but sparked an enormous hobby market.  The Raspberry
+Pi, or raspi for short, is available in two models: Model A is $25 the
+Model B is $35. The differences between the models is nominal: the
+more expensive one has more USB ports, more RAM and an Ethernet port.
+As a developer, the Model B is preferable, since it provides easy
+extension through USB and trivial network access via ethernet, not to
+mention more room to write sloppier prototype code in the roomy 512MB
+main memory.  The Model A would be best suited to production or
+permanent projects, post development.  (Not true in all cases: having
+network access can be critical for some applications-- though a USB
+wireless dongle may mediate this issue.)
 
 I purchased two of the $35 Model Bs, for a separate project, but
 quickly found that they would be a good fit for a variety of computing
@@ -72,6 +72,26 @@ data for processing.
 *more on the way*
 
 ## Configuration
+
+### USB Hub Configuration
+
+The first problem I ran in to was that the cheap USB Bluetooth dongle
+I purchased was not well received by my raspi.  Fortunately, like many
+things, I was not the only one who had this issue.  A quick web-search
+away turned up the [solution](
+http://raspberrypi.stackexchange.com/questions/1886/what-kernel-parameters-are-available-for-fixing-usb-problems):
+the USB hub's speed had to be turned down to the USB 1.1 standard, as
+the 2.0 standard was known to no play well with some cheap devices.
+
+The fix was simple, once I found it, and only involved changing a few
+boot variables the kernel uses to initialize hardware on boot.  In
+particular, I changed:
+
+* `dwc_otg.speed`: 1 will limit USB speed to full speed 12Mbps (USB 1.1).
+* `dwc_otg.microframe_schedule`: 1 (default now) This should fix the
+  error when too many periodic endpoints are present.
+
+### Bluetooth Configuration
 
 Having no documentation on the ODB2 sensor I purchased, I used the
 `sdptool` to tell me a little about the device.
@@ -130,6 +150,3 @@ now see the RFCOMM device available for use:
 $ ls -l /dev/rfcomm0 
 crw-rw---- 1 root uucp 216, 0 Jan  1 01:14 /dev/rfcomm0
 ```
-
-
-<!-- http://raspberrypi.stackexchange.com/questions/1886/what-kernel-parameters-are-available-for-fixing-usb-problems -->
