@@ -70,3 +70,66 @@ within range, join the wireless network and transfer the collected
 data for processing.
 
 *more on the way*
+
+## Configuration
+
+Having no documentation on the ODB2 sensor I purchased, I used the
+`sdptool` to tell me a little about the device.
+
+``` bash
+$ sudo sdptool records 00:19:5D:27:12:6E
+...
+Service Name: SPP Dev
+Service RecHandle: 0x10002
+Service Class ID List:
+  "Serial Port" (0x1101)
+Protocol Descriptor List:
+  "L2CAP" (0x0100)
+  "RFCOMM" (0x0003)
+    Channel: 1
+Language Base Attr List:
+  code_ISO639: 0x656e
+  encoding:    0x6a
+  base_offset: 0x100
+```
+
+It's not a hugely informative dump of information---in fact it's
+downright cryptic---but it does provide us with the protocol and
+channel to connect with.
+
+By configuring `/etc/bluetooth/rfcomm.conf` correctly, we get a device
+`/dev/rfcomm0`.
+
+``` bash
+rfcomm0 {
+  bind yes;
+  device 00:0D:3F:45:DF:8A;
+  channel 1;
+  comment "ODB2 Sensor";
+}
+```
+
+Then we only need to restart the bluetooth service:
+
+``` bash
+$ sudo systemctl stop  bluetooth.service && \
+  sudo systemctl start bluetooth.service
+```
+
+Eventually one could use the command:
+
+``` bash
+$ sudo rfcomm bind 0 00:15:A0:7A:90:F2 1
+```
+
+Where the 0 is the device suffix, the hardware address is that of the
+ODB2 sensor and the 1 is the channel we want to connect on.  We should
+now see the RFCOMM device available for use:
+
+``` bash
+$ ls -l /dev/rfcomm0 
+crw-rw---- 1 root uucp 216, 0 Jan  1 01:14 /dev/rfcomm0
+```
+
+
+<!-- http://raspberrypi.stackexchange.com/questions/1886/what-kernel-parameters-are-available-for-fixing-usb-problems -->
