@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "HTTP Redirects are Monadic"
-date: 2013-05-03 07:37
+date: 2013-05-19 07:37
 comments: true
 categories: 
 ---
@@ -29,15 +29,15 @@ redirection and safe redirections must be made.  Where a safe
 redirection is one that is not reflected visually in the browser's UI,
 allowing possible improvements to user experience.
 
-<<Insert shell/redirect behaviour comparison here>>
+<*Insert shell/redirect behaviour comparison here*>
 
 Before we continue, we require a few definitions: We need distinguish
 between a single redirect and a *transparent* redirect.  A transparent
 redirect is a series of *n* redirects, for *n > 1*.  Since transparent
 redirects may traverse one or more domains, we require a further
 distinction between safe and unsafe transparent redirects.  A safe
-redirect is a transparent redirect within a [trust domains, forests or
-realms][3]. In other words, if the sequence of redirects follow a path
+redirect is a transparent redirect within a [trust domains, forests or realms][3]. 
+In other words, if the sequence of redirects follow a path
 between trusted regions, then the sequence is considered safe.
 
 How to implement safe redirect is beyond the scope of this post.  For
